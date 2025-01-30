@@ -1,18 +1,23 @@
-import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
 import { createClient } from "@/utils/supabase/server";
+import { signOutAction } from "@/app/actions";
 import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button"
+import React from "react";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Get the authenticated user
+  const { data: { user } } = await supabase.auth.getUser();
 
+  // Redirect if the user is not authenticated
   if (!user) {
     return redirect("/sign-in");
   }
+
+  // Log the user data
+  console.log(user);
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
@@ -21,16 +26,58 @@ export default async function ProtectedPage() {
           <InfoIcon size="16" strokeWidth={2} />
           Esta es una pagina protegida, solo se puede acceder siendo un usuario autenticado.
         </div>
-      </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Tus detalles de usuario</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(user, null, 2)}
-        </pre>
-      </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Próximos pasos</h2>
-        <FetchDataSteps />
+
+        {/* Display user data */}
+        <div className="mt-6 p-6 bg-gray-600 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold mb-4 text-center">Información de usuario.</h2>
+          <div className="">
+            <div className="flex justify-center m-2">
+            <table className="min-w-fu border table-fixed border-gray-300">
+              <thead>
+                <tr className="bg-slate-800">
+                  <th className="py-2 px-4 border-b text-left">Dato</th>
+                  <th className="py-2 px-4 border-b text-left">Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="py-2 px-4 border-b">ID</td>
+                  <td className="py-2 px-4 border-b">{user.id}</td>
+                </tr>
+                <tr className="bg-slate-500">
+                  <td className="py-2 px-4 border-b">Email</td>
+                  <td className="py-2 px-4 border-b">{user.email}</td>
+                </tr>
+                <tr>
+                  <td className="py-2 px-4 border-b">Role</td>
+                  <td className="py-2 px-4 border-b">{user.role}</td>
+                </tr>
+                <tr className="bg-slate-500">
+                  <td className="py-2 px-4 border-b">Email Verified</td>
+                  <td className="py-2 px-4 border-b">
+                    {user.email_confirmed_at ? "Yes" : "No"}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2 px-4 border-b">Created At</td>
+                  <td className="py-2 px-4 border-b">
+                    {new Date(user.created_at).toLocaleString()}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+            <div className="flex justify-center m-2">
+            <form action={signOutAction}>
+            <Button type="submit" variant={"outline"}>
+              Cerrar sesión
+            </Button>
+          </form>
+          </div>
+          </div>
+          
+        </div>
+
       </div>
     </div>
   );
