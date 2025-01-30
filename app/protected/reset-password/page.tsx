@@ -3,6 +3,7 @@ import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 export default async function ResetPassword(props: {
   searchParams: Promise<Message>;
@@ -10,18 +11,25 @@ export default async function ResetPassword(props: {
   const searchParams = await props.searchParams;
   return (
     <form className="flex flex-col w-full max-w-md p-4 gap-2 [&>input]:mb-4">
-      <h1 className="text-2xl font-medium">Reset password</h1>
+      <h1 className="text-2xl font-medium">Reiniciar contraseña</h1>
       <p className="text-sm text-foreground/60">
-        Please enter your new password below.
+        por favor introduce nueva contraseña.
       </p>
-      <Label htmlFor="password">New password</Label>
+      
+      <p className="text-sm text text-foreground">
+          ¿Ya tienes una cuenta?{" "}
+          <Link className="text-primary font-medium underline" href="/sign-in">
+            Iniciar sesión
+          </Link>
+        </p>
+      <Label htmlFor="password">Nueva contraseña</Label>
       <Input
         type="password"
         name="password"
         placeholder="New password"
         required
       />
-      <Label htmlFor="confirmPassword">Confirm password</Label>
+      <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
       <Input
         type="password"
         name="confirmPassword"
@@ -29,7 +37,7 @@ export default async function ResetPassword(props: {
         required
       />
       <SubmitButton formAction={resetPasswordAction}>
-        Reset password
+        Reiniciar contraseña
       </SubmitButton>
       <FormMessage message={searchParams} />
     </form>
