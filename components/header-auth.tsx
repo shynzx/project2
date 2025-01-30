@@ -14,56 +14,55 @@ export default async function AuthButton() {
 
   if (!hasEnvVars) {
     return (
-      <>
-        <div className="flex gap-4 items-center">
-          <div>
-            <Badge
-              variant={"default"}
-              className="font-normal pointer-events-none"
-            >
-              Please update .env.local file with anon key and url
-            </Badge>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              asChild
-              size="sm"
-              variant={"outline"}
-              disabled
-              className="opacity-75 cursor-none pointer-events-none"
-            >
-              <Link href="/sign-in">Sign in</Link>
-            </Button>
-            <Button
-              asChild
-              size="sm"
-              variant={"default"}
-              disabled
-              className="opacity-75 cursor-none pointer-events-none"
-            >
-              <Link href="/sign-up">Sign up</Link>
-            </Button>
-          </div>
+      <div className="flex justify-end gap-4 items-center bg-red-600">
+        <div>
+          <Badge
+            variant={"default"}
+            className="font-normal pointer-events-none"
+          >
+            Please update .env.local file with anon key and url
+          </Badge>
         </div>
-      </>
+        <div className="flex gap-2">
+          <Button
+            asChild
+            size="sm"
+            variant={"outline"}
+            disabled
+            className="opacity-75 cursor-none pointer-events-none"
+          >
+            <Link href="/sign-in">Iniciar sesión</Link>
+          </Button>
+          <Button
+            asChild
+            size="sm"
+            variant={"default"}
+            disabled
+            className="opacity-75 cursor-none pointer-events-none"
+          >
+            <Link href="/sign-up">Registro</Link>
+          </Button>
+        </div>
+      </div>
     );
   }
+
   return user ? (
-    <div className="flex items-center gap-4">
+    <div className="flex justify-end items-center gap-4">
       Hey, {user.email}!
       <form action={signOutAction}>
         <Button type="submit" variant={"outline"}>
-          Sign out
+          Cerrar sesión
         </Button>
       </form>
     </div>
   ) : (
-    <div className="flex gap-2">
+    <div className="flex justify-end gap-2">
       <Button asChild size="sm" variant={"outline"}>
-        <Link href="/sign-in">Sign in</Link>
+        <Link href="/sign-in">Iniciar sesión</Link>
       </Button>
       <Button asChild size="sm" variant={"default"}>
-        <Link href="/sign-up">Sign up</Link>
+        <Link href="/sign-up">Registro</Link>
       </Button>
     </div>
   );
